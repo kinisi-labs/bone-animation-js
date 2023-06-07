@@ -71,6 +71,9 @@ function renderKneeBones(j) {
 	bw.DOM("#front_left")[0].src    = "./"+renderData.frontFiles  [j % renderData.frontFiles.length]; 
 	bw.DOM("#front_right")[0].src   = "./"+renderData.frontFiles  [j % renderData.frontFiles.length]; 	
 }
+
+
+
 function pauseSteps(){ pause = !pause; bw.DOM("#pause")[0].style["background-color"] = pause ? "grey" : "lightblue"  }
 const value = document.querySelector("#imageIndex");
 value.addEventListener("input",(e)=>{bw.DOM("#selection",e.target.value), renderKneeBones(e.target.value)})

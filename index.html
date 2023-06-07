@@ -22,7 +22,7 @@ button {
 	color : white;
 	font-size: 2rem;
 }
-button : hover {
+button:hover{
 	background-color: grey;
 }
 body {
@@ -77,6 +77,13 @@ function pauseSteps(){ pause = !pause; bw.DOM("#pause")[0].style["background-col
 const value = document.querySelector("#imageIndex");
 value.addEventListener("input",(e)=>{bw.DOM("#selection",e.target.value), renderKneeBones(e.target.value)})
 
+//=================================================================================================
+// example of how to render a single image using vanilla js
+// needs element and angle and path to images.
+function rendeerKneeAnimation(id,angle) {
+	let el = document.getElementById(id);
+	el.src = "./"+renderData.lateralFiles[j % renderData.lateralFiles.length];
+}
 
 </script>	
 </body>
