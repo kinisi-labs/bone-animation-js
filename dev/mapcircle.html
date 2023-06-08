@@ -23,12 +23,26 @@
 }
 .leaflet-control-attribution { display: none; }
 
+.radius-circle {
+        border-radius: 50%;
+        opacity: 0.6;
+        background-color: rgb(17, 17, 219);
+        z-index: 650;
+        position: relative;
+        height: 15px;
+        width: 15px;
+        left: 190px;
+        top: -135px;
+        pointer-events: none;    
+    }
+
 </style>
 </head>
 <body style="font-family: sans-serif;">
 <h1>Kinisi Map Test Using Leaflet</h1>
-<div id="map"></div>
-<a href="mapcircle.html">Map with center circle</a>
+<div id="map"  ></div>
+<div class="radius-circle"></div>
+<a href="map.html">Map only</a>
 <script>
     var lat = 54.687, lng = 25.2797, zoom = 9; // global map variables
 
