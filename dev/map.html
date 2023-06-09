@@ -37,7 +37,7 @@
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { }).addTo(map);
   
     // example map update
-    setInterval( () => { lat -= 0.0002; map.flyTo([lat, lng], zoom, 1000);})
+    setInterval( () => { lat -= 0.0020; map.flyTo([lat, lng], zoom);},125)
 </script>
     
 </body>
