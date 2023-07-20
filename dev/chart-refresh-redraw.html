@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Real-time Line Chart</title>
+    <script src="https://www.unpkg.com/bitwrench@1.2.16/bitwrench.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* simple shared styles for plot experiments */
+        .chartArea {
+            height: 95%;
+        }
+
+        .widget {
+            color: #111;
+            height: 98%;
+            border: 1px solid #000000;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px;
+            float: left;
+
+        }
+
+        .chartRow {
+            height: 45vh;
+        }
+    </style>
+    </link>
+</head>
+
+<body class="bw-def-page-setup bw-font-sans-serif">
+    <div class="bw-container">
+        <h2>Real-Time Streaming Chart with Chart.js</h2>
+        This chart uses separate update and redraw functions to improve performance.
+    </div>
+    <div class="bw-container">
+        <div class="bw-row chartRow">
+            <div class="widget bw-col-5 chart-container" style="position: relative;">
+                <canvas id="chart" class="chartArea fribble"></canvas>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        // Create an initial empty array to store the data for each trace
+        const gLength = 200;
+
+        let sineFunc = function (freq, amp = 10, phase = 0, noise = 0) {
+            let phaseRad = phase * Math.PI / 180;
+            t = Date.now() / 1000;
+            return amp * Math.sin(2 * Math.PI * freq * t + phaseRad) + noise * (Math.random() - 0.5);
+        }
+
+        // Function to update the chart with new data for each trace
+        // values is array of new data points for each trace
+        function updateChart(chart, values, render = true) {
+            let i;
+            if (values) {
+                for (i = 0; i < chart.data.datasets.length; i++) { // each trace
+                    chart.data.datasets[i].data.push(values[i]);
+
+                    if (chart.data.datasets[i].data.length > gLength) {
+                        chart.data.datasets[i].data.shift();
+                    }
+                }
+            }
+            if (render)
+                chart.update();
+        }
+
+        // Create a Chart.js instance
+        const ctx = bw.DOM("#chart")[0].getContext('2d');
+        //
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: gLength }, (_, i) => i),
+                datasets: [
+                    {
+                        label: 'series-x',
+                        data: [],
+                        borderColor: 'blue',
+                        pointRadius: 0,
+                        borderWidth: 1,
+                        fill: false
+                    },
+                    {
+                        label: 'series-y',
+                        data: [],
+                        borderColor: 'red',
+                        pointRadius: 0,
+                        borderWidth: 1,
+                        fill: false
+                    },
+                    {
+                        label: 'series-z',
+                        data: [],
+                        borderColor: 'green',
+                        pointRadius: 0,
+                        borderWidth: 1,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0 // Disable animation for smoother real-time updates
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        usePointStyle: false,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                }
+            }
+        });
+
+        // Redraw the chart every 100ms
+        setInterval(() => {
+            updateChart(chart);
+        }, 100);
+
+
+        // Update the data every seperate from chart redraw
+        setInterval(() => {
+            const values = [50 + sineFunc(3, 50, 0, 15), 50 - sineFunc(3, 40, 120, 15), 50 + sineFunc(3, 40, 240, 15)];
+            updateChart(chart, values, false);
+        }, 3);
+    </script>
+</body>
+
+</html>
